@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# claude-golang-template
 
-## Getting Started
+Boilerplate konfigurasi Claude Code untuk project backend Go dengan stack:
+Gin + GORM v2 + PostgreSQL + godotenv + zerolog (via `pkg/logger`) + Golang-Migrate + Testify.
 
-First, run the development server:
+Diambil dari konfigurasi yang sudah terbukti dipakai di project
+`be-cms-company-profile-web-tour`.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Isi
+
+```
+├── CLAUDE.md                    # Template konteks project — ISI PLACEHOLDER-nya
+└── .claude/
+    ├── rules/                   # Konvensi per topik, dimuat otomatis sesuai path file
+    │   ├── backend.md            # Layer dependency, interface, error wrap, context
+    │   ├── api-design.md         # ShouldBindJSON, response format, status code, routing
+    │   ├── logging.md            # pkg/logger, level log, field konteks, data sensitif
+    │   └── init.md               # Urutan inisialisasi main.go, config, logger, database
+    └── commands/                # Dipanggil manual dengan /nama
+        ├── add-rule.md           # /add-rule — tambah rule saat agent salah pattern
+        ├── check-convention.md   # /check-convention — checklist sebelum coding
+        └── audit-rules.md        # /audit-rules — bersihkan rules usang/duplikat
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Cara pakai di project baru
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# dari root project baru:
+cp -r ~/development/claude-golang-template/.claude .
+cp ~/development/claude-golang-template/CLAUDE.md .
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Lalu:
 
-## Learn More
+1. **Isi placeholder di `CLAUDE.md`** — `<NAMA_PROJECT>`, `<NAMA_BINARY>`,
+   `<DESKRIPSI_SINGKAT_PROJECT>`. Bisa juga jalankan `/init` di Claude Code lalu
+   minta Claude merge hasilnya ke template ini.
+2. **Cek struktur project** — rules mengasumsikan layout `cmd/` + `internal/` +
+   `pkg/logger` + `pkg/response`. Kalau layout berbeda, sesuaikan `paths:` di
+   frontmatter tiap file rules.
+3. Jalankan `/check-convention` sebagai tes bahwa rules terbaca.
 
-To learn more about Next.js, take a look at the following resources:
+## Update rules ke depannya
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Rules berevolusi lewat siklus di masing-masing project:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `/add-rule` — saat agent menulis kode yang salah pattern, tambahkan sebagai
+  contoh atau prinsip baru.
+- `/audit-rules` — jalankan setiap selesai feature besar atau 2 minggu untuk
+  memangkas duplikasi, rule TEMP kadaluarsa, dan section gemuk.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Kalau hasil perbaikan di sebuah project layak dipakai project lain, salin balik
+perubahannya ke template ini supaya project baru berikutnya kebagian.
