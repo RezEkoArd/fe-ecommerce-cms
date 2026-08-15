@@ -52,6 +52,13 @@ async function requestNewToken() {
     return token
 }
 
+// Endpoint auth punya makna 401 sendiri, jadi dikecualikan dari auto-refresh.
+const AUTH_ENDPOINTS = ["/auth/login", "/auth/register", "/auth/refresh", "/auth/logout"];
+
+function isAuthEndpoint(url: string | undefined) {
+  return !!url && AUTH_ENDPOINTS.some((path) => url.includes(path));
+}
+
 // --- Response: unwrap envelope + auto-refresh saat 401 ---
 
 apiClient.interceptors.response.use(
@@ -67,9 +74,10 @@ apiClient.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // Refresh yang gagal jangan memicu refresh lagi.
-    if (original.url?.includes("/auth/refresh")) {
-      clearAccessToken();
+    // Endpoint auth tidak boleh memicu refresh.
+    // 401 di /auth/login artinya kredensial salah — bukan sesi kedaluwarsa.
+    // 401 di /auth/refresh artinya sesi memang habis.
+    if (isAuthEndpoint(original.url)) {
       return Promise.reject(error);
     }
 
@@ -93,9 +101,8 @@ apiClient.interceptors.response.use(
     } catch (refreshError) {
       flushQueue(null);
       clearAccessToken();
-      if (typeof window !== "undefined") {
-        window.location.href = "/login";
-      }
+      // Redirect ditangani pemanggil (hook/komponen) lewat router Next,
+      // bukan window.location — supaya tidak me-reload seluruh aplikasi.
       return Promise.reject(refreshError);
     } finally {
       isRefreshing = false;
