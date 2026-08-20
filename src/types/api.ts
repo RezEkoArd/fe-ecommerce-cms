@@ -39,3 +39,8 @@ export type ListParams = {
   limit?: number;
   offset?: number;
 };
+
+export type ProductParams = ListParams & {
+  search?: string;
+  category_id?: string;
+};
