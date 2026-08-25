@@ -6,11 +6,23 @@ export type Category = {
   Name: string;
   Slug: string;
   CreatedAt: string;
+  // Hanya terisi pada endpoint list.
+  ProductCount?: number;
 };
 
 export type ProductImage = {
   ID: string;
+  ProductID: string;
   URL: string;
+  IsPrimary: boolean;
+  CreatedAt: string;
+};
+
+// Jawaban POST /products/:id/images/presign
+export type PresignedUpload = {
+  upload_url: string;
+  object_key: string;
+  public_url: string;
 };
 
 export type Product = {

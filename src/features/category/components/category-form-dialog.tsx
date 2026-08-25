@@ -20,7 +20,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useCreateCategory } from "../hooks/use-categories";
+import { useCreateCategory, useUpdateCategory } from "../hooks/use-categories";
+import type { Category } from "@/types/api";
 import {
   categorySchema,
   type CategoryInput,
@@ -29,17 +30,23 @@ import {
 type CategoryFormDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** Diisi untuk mode edit; kosong berarti tambah baru. */
+  category?: Category;
 };
 
 export function CategoryFormDialog({
   open,
   onOpenChange,
+  category,
 }: CategoryFormDialogProps) {
-  const { mutate, isPending } = useCreateCategory();
+  const isEdit = !!category;
+  const create = useCreateCategory();
+  const update = useUpdateCategory(category?.ID ?? "");
+  const { mutate, isPending } = isEdit ? update : create;
 
   const form = useForm<CategoryInput>({
     resolver: zodResolver(categorySchema),
-    defaultValues: { name: "" },
+    defaultValues: { name: category?.Name ?? "" },
   });
 
   function handleSubmit(values: CategoryInput) {
@@ -55,9 +62,9 @@ export function CategoryFormDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Tambah Kategori</DialogTitle>
+          <DialogTitle>{isEdit ? "Edit Kategori" : "Tambah Kategori"}</DialogTitle>
           <DialogDescription>
-            Kategori dipakai untuk mengelompokkan produk.
+            {isEdit ? "Perbarui nama kategori." : "Kategori dipakai untuk mengelompokkan produk."}
           </DialogDescription>
         </DialogHeader>
 
@@ -86,7 +93,7 @@ export function CategoryFormDialog({
                 Batal
               </Button>
               <Button type="submit" disabled={isPending}>
-                {isPending ? "Menyimpan…" : "Tambah"}
+                {isPending ? "Menyimpan…" : isEdit ? "Simpan" : "Tambah"}
               </Button>
             </div>
           </form>

@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { ImageIcon, Pencil, Plus, Trash2 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,7 @@ import { ProductFormDialog } from "./product-form-dialog";
 import { useDeleteProduct, useProducts } from "../hooks/use-products";
 import { useDebounced } from "@/lib/use-debounced";
 import { formatRupiah } from "@/lib/utils";
-import type { Product } from "@/types/api";
+import type { Product, ProductImage } from "@/types/api";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { useConfirm } from "@/lib/use-confirm";
 
@@ -100,9 +101,17 @@ export function ProductTable() {
                 data.items.map((product) => (
                   <tr key={product.ID} className="border-t">
                     <td className="px-6 py-3.5">
-                      <div className="font-medium">{product.Name}</div>
-                      <div className="text-xs text-muted-foreground">
-                        {product.Slug}
+                      <div className="flex items-center gap-3">
+                        <ProductThumbnail
+                          images={product.Images}
+                          alt={product.Name}
+                        />
+                        <div className="min-w-0">
+                          <div className="font-medium">{product.Name}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {product.Slug}
+                          </div>
+                        </div>
                       </div>
                     </td>
                     <td className="px-6 py-3.5 text-muted-foreground">
@@ -183,5 +192,30 @@ export function ProductTable() {
 />
 
     </>
+  );
+}
+
+/** Thumbnail produk — gambar utama, atau kotak kosong kalau belum ada. */
+function ProductThumbnail({
+  images,
+  alt,
+}: {
+  images: ProductImage[] | null;
+  alt: string;
+}) {
+  const primary = images?.find((img) => img.IsPrimary) ?? images?.[0];
+
+  if (!primary) {
+    return (
+      <div className="flex size-10 shrink-0 items-center justify-center rounded border bg-muted text-muted-foreground">
+        <ImageIcon className="size-4" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative size-10 shrink-0 overflow-hidden rounded border bg-muted">
+      <Image src={primary.URL} alt={alt} fill sizes="40px" className="object-cover" />
+    </div>
   );
 }

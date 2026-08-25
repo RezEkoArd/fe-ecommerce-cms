@@ -14,6 +14,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  ProductImageManager,
+  ProductImageManagerPlaceholder,
+} from "./product-image-manager";
 import { Textarea } from "@/components/ui/textarea";
 import { useCategories } from "@/features/category/hooks/use-categories";
 import {
@@ -146,6 +150,18 @@ export function ProductForm({
             </FormItem>
           )}
         />
+
+        {/* Gambar butuh ID produk, jadi hanya tersedia saat edit. */}
+        <div className="border-t pt-4">
+          {product ? (
+            <ProductImageManager
+              productId={product.ID}
+              images={product.Images}
+            />
+          ) : (
+            <ProductImageManagerPlaceholder />
+          )}
+        </div>
 
         <div className="mt-2 flex justify-end gap-2">
           <Button type="button" variant="outline" onClick={onCancel}>

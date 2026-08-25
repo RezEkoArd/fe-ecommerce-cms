@@ -2,15 +2,18 @@
 
 import { Product, ProductParams } from '@/types/api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import React from 'react'
+import { toast } from 'sonner';
+
 import { getProducts } from '../utils/api/get-products';
 import { createProduct } from '../utils/api/create-products';
-import { toast } from 'sonner';
-import { getErrorMessage } from '@/lib/api-client';
-import { ProductOutput } from '../schema/product-schema';
 import { updateProduct } from '../utils/api/update-products';
-import { error } from 'console';
 import { deleteProduct } from '../utils/api/delete-products';
+import {
+    deleteProductImage,
+    uploadProductImage,
+} from '../utils/api/upload-product-image';
+import { ProductOutput } from '../schema/product-schema';
+import { getErrorMessage } from '@/lib/api-client';
 
 export const productKeys = {
     all: ["products"] as const,
@@ -62,6 +65,32 @@ export function useDeleteProduct() {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: productKeys.lists() });
             toast.success("Produk berhasil dihapus");
+        },
+        onError: (error) => toast.error(getErrorMessage(error)),
+    });
+}
+
+export function useUploadProductImage(productId: string) {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (file: File) => uploadProductImage(productId, file),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: productKeys.lists() });
+            toast.success("Gambar berhasil diunggah");
+        },
+        onError: (error) => toast.error(getErrorMessage(error)),
+    });
+}
+
+export function useDeleteProductImage(productId: string) {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (imageId: string) => deleteProductImage(productId, imageId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: productKeys.lists() });
+            toast.success("Gambar berhasil dihapus");
         },
         onError: (error) => toast.error(getErrorMessage(error)),
     });

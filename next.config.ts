@@ -10,10 +10,11 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
-    remotePatterns: [{
-      protocol: "http",
-      hostname: "localhost"
-    }]
+    remotePatterns: [
+      { protocol: "http", hostname: "localhost" },
+      // MinIO — gambar produk. Tanpa ini <Image> menolak memuatnya.
+      { protocol: "http", hostname: "rezekoard.web.id", port: "9000" },
+    ],
   }
 };
 
