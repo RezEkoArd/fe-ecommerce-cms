@@ -14,6 +14,7 @@ import {
 } from '../utils/api/upload-product-image';
 import { ProductOutput } from '../schema/product-schema';
 import { getErrorMessage } from '@/lib/api-client';
+import { getProductBySlug } from '../utils/api/get-product-by-slug';
 
 export const productKeys = {
     all: ["products"] as const,
@@ -94,6 +95,16 @@ export function useDeleteProductImage(productId: string) {
         },
         onError: (error) => toast.error(getErrorMessage(error)),
     });
+}
+
+// Public 
+
+export function useProductBySlug(slug: string) {
+    return useQuery({
+        queryKey: productKeys.detail(slug),
+        queryFn: () => getProductBySlug(slug),
+        enabled: !!slug,
+    })
 }
 
 export default useProducts

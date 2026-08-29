@@ -7,6 +7,10 @@ import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/api-client";
 import { updateOrderStatus } from "../utils/api/update-orders-status";
 import { OrderStatus } from "../types/api";
+import { useAuthStore } from "@/store/auth-store";
+import { getMyOrders } from "../utils/api/get-my-order";
+import { checkout } from "../utils/api/checkout";
+import { useRouter } from "next/navigation";
 
 export const orderKeys = {
   all: ["orders"] as const,
@@ -40,6 +44,34 @@ export function useUpdateOrderStatus() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: orderKeys.lists() });
       toast.success("Status pesanan diperbarui");
+    },
+    onError: (error) => toast.error(getErrorMessage(error)),
+  });
+}
+
+
+export function useMyOrders() {
+  const user = useAuthStore((s) => s.user);
+
+  return useQuery({
+    queryKey: [...orderKeys.all, "mine"] as const,
+    queryFn: getMyOrders,
+    enabled: !!user,
+  });
+}
+
+export function useCheckout() {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: (couponCode?: string) => checkout(couponCode),
+    onSuccess: () => {
+      // Keranjang dikosongkan backend saat checkout.
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      queryClient.invalidateQueries({ queryKey: orderKeys.all });
+      toast.success("Pesanan berhasil dibuat");
+      router.push("/pesanan");
     },
     onError: (error) => toast.error(getErrorMessage(error)),
   });

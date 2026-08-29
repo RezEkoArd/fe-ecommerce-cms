@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 
 import { getErrorMessage } from '@/lib/api-client';
 import { login } from '../api/login';
+import { getSession } from '@/lib/auth';
 
 export default function useLogin() {
   const router = useRouter();
@@ -17,12 +18,16 @@ export default function useLogin() {
     mutationFn: login,
     onSuccess: (data) => {
         setSession(data.access_token);
-        toast.success("Berhasil masuk")
+        toast.success("Berhasil masuk");
 
-        // replace() sudah memicu request ke server, dan middleware membaca
-        // cookie pada request itu — refresh() tambahan hanya menambah round-trip.
         const redirect = searchParams.get("redirect");
-        router.replace(redirect ?? "/dashboard");
+        if (redirect) {
+            router.replace(redirect);
+            return;
+        }
+
+        const session = getSession();
+        router.replace(session?.role === "admin" ? "/dashboard" : "/");
     },
     onError: (error) => {
         toast.error(getErrorMessage(error));
