@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
+import { ImagePlaceholder } from "@/components/shared/image-placeholder";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 
@@ -81,8 +83,25 @@ export function CategoryTable() {
                   const inUse = (category.ProductCount ?? 0) > 0;
                   return (
                     <tr key={category.ID} className="border-t">
-                      <td className="px-6 py-3.5 font-medium">
-                        {category.Name}
+                      <td className="px-6 py-3.5">
+                        <div className="flex items-center gap-3">
+                          {category.ImageURL ? (
+                            <div className="relative size-9 shrink-0 overflow-hidden rounded-md border">
+                              <Image
+                                src={category.ImageURL}
+                                alt=""
+                                fill
+                                sizes="36px"
+                                className="object-cover"
+                              />
+                            </div>
+                          ) : (
+                            <div className="size-9 shrink-0 overflow-hidden rounded-md border">
+                              <ImagePlaceholder size="sm" />
+                            </div>
+                          )}
+                          <span className="font-medium">{category.Name}</span>
+                        </div>
                       </td>
                       <td className="px-6 py-3.5 font-mono text-xs text-muted-foreground">
                         {category.Slug}

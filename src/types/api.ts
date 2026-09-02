@@ -5,6 +5,8 @@ export type Category = {
   ID: string;
   Name: string;
   Slug: string;
+  /** URL gambar sampul kategori. Boleh string kosong. */
+  ImageURL: string;
   CreatedAt: string;
   // Hanya terisi pada endpoint list.
   ProductCount?: number;

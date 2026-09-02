@@ -21,7 +21,7 @@ export function MyOrders() {
         <p className="mb-6 text-muted-foreground">
           Masuk untuk melihat riwayat pesananmu.
         </p>
-        <Button render={<Link href="/masuk?redirect=/pesanan" />}>Masuk</Button>
+        <Button render={<Link href="/masuk?redirect=/pesanan" />} nativeButton={false}>Masuk</Button>
       </div>
     );
   }
@@ -52,7 +52,7 @@ export function MyOrders() {
         <p className="mb-6 text-sm text-muted-foreground">
           Pesanan yang kamu buat akan muncul di sini.
         </p>
-        <Button render={<Link href="/produk" />}>Mulai belanja</Button>
+        <Button render={<Link href="/produk" />} nativeButton={false}>Mulai belanja</Button>
       </div>
     );
   }
@@ -91,6 +91,21 @@ export function MyOrders() {
                     </span>
                   </div>
                 ))}
+              </div>
+            )}
+
+            {order.Shipping?.Recipient && (
+              <div className="mb-4 border-b pb-4 text-[13px] text-muted-foreground">
+                <div className="mb-0.5 font-medium text-foreground">
+                  Dikirim ke
+                </div>
+                <div>
+                  {order.Shipping.Recipient} · {order.Shipping.Phone}
+                </div>
+                <div>
+                  {order.Shipping.Street}, {order.Shipping.City}{" "}
+                  {order.Shipping.PostalCode}
+                </div>
               </div>
             )}
 

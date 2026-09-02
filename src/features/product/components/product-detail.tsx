@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { ImagePlaceholder } from "@/components/shared/image-placeholder";
 import Link from "next/link";
 import { Minus, Plus } from "lucide-react";
 
@@ -95,9 +96,7 @@ export function ProductDetail({ slug }: { slug: string }) {
                 priority
               />
             ) : (
-              <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-                Tanpa gambar
-              </div>
+              <ImagePlaceholder size="lg" label="Tanpa gambar" />
             )}
           </div>
 

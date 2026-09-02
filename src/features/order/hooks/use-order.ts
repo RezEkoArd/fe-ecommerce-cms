@@ -65,7 +65,13 @@ export function useCheckout() {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: (couponCode?: string) => checkout(couponCode),
+    mutationFn: ({
+      addressId,
+      couponCode,
+    }: {
+      addressId: string;
+      couponCode?: string;
+    }) => checkout(addressId, couponCode),
     onSuccess: () => {
       // Keranjang dikosongkan backend saat checkout.
       queryClient.invalidateQueries({ queryKey: ["cart"] });

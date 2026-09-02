@@ -153,7 +153,7 @@ export function CartList() {
         {/* <Button asChild className="h-11 w-full">
           <Link href="/checkout">Lanjut ke Checkout</Link>
         </Button> */}
-        <Button render={<Link href="/checkout" />} className="h-11 w-full">
+        <Button render={<Link href="/checkout" />} nativeButton={false} className="h-11 w-full">
           Lanjut ke Checkout
         </Button>
       </aside>
@@ -180,7 +180,7 @@ function EmptyState({
       {/* <Button asChild>
         <Link href={actionHref}>{actionLabel}</Link>
       </Button> */}
-      <Button render={<Link href={actionHref} />}>{actionLabel}</Button>
+      <Button render={<Link href={actionHref} />} nativeButton={false}>{actionLabel}</Button>
     </div>
   );
 }

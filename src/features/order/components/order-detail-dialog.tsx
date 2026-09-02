@@ -85,6 +85,22 @@ export function OrderDetailDialog({
               )}
             </Section>
 
+            {/* Alamat pengiriman */}
+            {order.Shipping?.Recipient && (
+              <Section title="Alamat Pengiriman">
+                <div className="grid gap-1.5">
+                  <Row label="Penerima">{order.Shipping.Recipient}</Row>
+                  <Row label="Telepon">{order.Shipping.Phone}</Row>
+                  <Row label="Alamat">
+                    <span className="text-right">
+                      {order.Shipping.Street}, {order.Shipping.City}{" "}
+                      {order.Shipping.PostalCode}
+                    </span>
+                  </Row>
+                </div>
+              </Section>
+            )}
+
             {/* Item pesanan */}
             <Section title={`Item (${order.Items?.length ?? 0})`}>
               {!order.Items?.length ? (

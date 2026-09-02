@@ -9,11 +9,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useCart } from "@/features/cart/hooks/use-cart";
 import { calculateCartTotal } from "@/features/cart/utils/cart-total";
 import { useCheckout } from "../hooks/use-order";
+import { CheckoutAddress } from "./checkout-address";
 import { formatRupiah } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth-store";
 
 export function CheckoutSummary() {
   const [couponCode, setCouponCode] = useState("");
+  const [addressId, setAddressId] = useState("");
   const user = useAuthStore((s) => s.user);
   const { data: cart, isLoading } = useCart();
   const { mutate: submitOrder, isPending } = useCheckout();
@@ -24,7 +26,7 @@ export function CheckoutSummary() {
         <p className="mb-6 text-muted-foreground">
           Masuk terlebih dahulu untuk checkout.
         </p>
-        <Button render={<Link href="/masuk?redirect=/checkout" />}>Masuk</Button>
+        <Button render={<Link href="/masuk?redirect=/checkout" />} nativeButton={false}>Masuk</Button>
       </div>
     );
   }
@@ -37,7 +39,7 @@ export function CheckoutSummary() {
     return (
       <div className="py-20 text-center">
         <p className="mb-6 text-muted-foreground">Keranjang masih kosong.</p>
-        <Button render={<Link href="/produk" />}>Mulai belanja</Button>
+        <Button render={<Link href="/produk" />} nativeButton={false}>Mulai belanja</Button>
       </div>
     );
   }
@@ -46,7 +48,13 @@ export function CheckoutSummary() {
 
   return (
     <div className="grid gap-14 lg:grid-cols-[1fr_340px]">
-      <div>
+      <div className="grid gap-9">
+        <section>
+          <h2 className="mb-5 text-[15px] font-bold">Alamat Pengiriman</h2>
+          <CheckoutAddress selectedId={addressId} onSelect={setAddressId} />
+        </section>
+
+        <section>
         <h2 className="mb-5 text-[15px] font-bold">Item Pesanan</h2>
         <div className="grid gap-4">
           {items.map((item) => (
@@ -68,6 +76,7 @@ export function CheckoutSummary() {
             </div>
           ))}
         </div>
+        </section>
       </div>
 
       <aside className="h-fit rounded-xl border bg-card p-7 lg:sticky lg:top-24">
@@ -104,11 +113,22 @@ export function CheckoutSummary() {
 
         <Button
           className="h-11 w-full"
-          disabled={isPending}
-          onClick={() => submitOrder(couponCode || undefined)}
+          disabled={isPending || !addressId}
+          onClick={() =>
+            submitOrder({
+              addressId,
+              couponCode: couponCode || undefined,
+            })
+          }
         >
           {isPending ? "Memproses…" : "Buat Pesanan"}
         </Button>
+
+        {!addressId && (
+          <p className="mt-3 text-center text-xs text-muted-foreground">
+            Pilih alamat pengiriman terlebih dahulu.
+          </p>
+        )}
       </aside>
     </div>
   );

@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
+import { ImagePlaceholder } from "@/components/shared/image-placeholder";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCategories } from "../hooks/use-categories";
@@ -38,10 +40,18 @@ export function CategoryGrid() {
             href={`/produk?category=${category.ID}`}
             className="overflow-hidden rounded-lg border bg-card transition-colors hover:border-ring"
           >
-            <div className="flex aspect-square items-end bg-secondary p-3.5">
-              <span className="text-[22px] font-medium text-primary">
-                {category.Name.slice(0, 2)}
-              </span>
+            <div className="relative aspect-square bg-secondary">
+              {category.ImageURL ? (
+                <Image
+                  src={category.ImageURL}
+                  alt=""
+                  fill
+                  sizes="(max-width: 640px) 50vw, 20vw"
+                  className="object-cover"
+                />
+              ) : (
+                <ImagePlaceholder />
+              )}
             </div>
             <div className="p-3.5">
               <div className="text-[15px] font-medium">{category.Name}</div>

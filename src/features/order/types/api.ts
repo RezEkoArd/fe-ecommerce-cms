@@ -17,9 +17,19 @@ export type Order = {
     Items: OrderItems[] | null
     CreatedAt: string;
     UpdatedAt: string;
+    /** Snapshot alamat saat checkout — tidak berubah meski alamat user diedit. */
+    Shipping: ShippingAddress;
     // Hanya terisi pada endpoint detail (GET /admin/orders/:id).
     User?: OrderUser | null;
     Coupon?: OrderCoupon | null;
+}
+
+export type ShippingAddress = {
+    Recipient: string;
+    Phone: string;
+    Street: string;
+    City: string;
+    PostalCode: string;
 }
 
 export type OrderUser = {

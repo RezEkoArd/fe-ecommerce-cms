@@ -20,6 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { CategoryImagePicker } from "./category-image-picker";
 import { useCreateCategory, useUpdateCategory } from "../hooks/use-categories";
 import type { Category } from "@/types/api";
 import {
@@ -46,7 +47,10 @@ export function CategoryFormDialog({
 
   const form = useForm<CategoryInput>({
     resolver: zodResolver(categorySchema),
-    defaultValues: { name: category?.Name ?? "" },
+    defaultValues: {
+      name: category?.Name ?? "",
+      image_url: category?.ImageURL ?? "",
+    },
   });
 
   function handleSubmit(values: CategoryInput) {
@@ -78,6 +82,23 @@ export function CategoryFormDialog({
                   <FormLabel>Nama kategori</FormLabel>
                   <FormControl>
                     <Input placeholder="Outerwear" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="image_url"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Gambar kategori</FormLabel>
+                  <FormControl>
+                    <CategoryImagePicker
+                      value={field.value ?? ""}
+                      onChange={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

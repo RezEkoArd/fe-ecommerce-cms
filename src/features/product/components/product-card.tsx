@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ImagePlaceholder } from "@/components/shared/image-placeholder";
 import Link from "next/link";
 
 import { formatRupiah } from "@/lib/utils";
@@ -23,9 +24,7 @@ export function ProductCard({ product }: { product: Product }) {
               className="object-cover transition-transform duration-300 hover:scale-105"
             />
           ) : (
-            <div className="flex h-full items-center justify-center text-xs text-muted-foreground">
-              Tanpa gambar
-            </div>
+            <ImagePlaceholder label="Tanpa gambar" />
           )}
         </div>
       </Link>

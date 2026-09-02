@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/store/auth-store";
 
 const NAV = [
   { href: "/produk", label: "Katalog" },
@@ -13,6 +14,7 @@ const NAV = [
 
 export function PublicHeader() {
   const pathname = usePathname();
+  const user = useAuthStore((s) => s.user);
 
   return (
     <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur">
@@ -36,10 +38,10 @@ export function PublicHeader() {
             </Link>
           ))}
           <Link
-            href="/masuk"
+            href={user ? "/akun" : "/masuk"}
             className="ml-1.5 rounded-md bg-primary px-5.5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
           >
-            Masuk
+            {user ? "Akun" : "Masuk"}
           </Link>
         </nav>
       </div>

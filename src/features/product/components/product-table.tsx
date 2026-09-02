@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { ImageIcon, Pencil, Plus, Trash2 } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
+import { ImagePlaceholder } from "@/components/shared/image-placeholder";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -207,8 +208,8 @@ function ProductThumbnail({
 
   if (!primary) {
     return (
-      <div className="flex size-10 shrink-0 items-center justify-center rounded border bg-muted text-muted-foreground">
-        <ImageIcon className="size-4" />
+      <div className="size-10 shrink-0 overflow-hidden rounded border">
+        <ImagePlaceholder size="sm" />
       </div>
     );
   }
