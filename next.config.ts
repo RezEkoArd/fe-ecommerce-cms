@@ -12,15 +12,14 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: "http", hostname: "localhost" },
-      // MinIO — gambar produk. Tanpa ini <Image> menolak memuatnya.
       { protocol: "http", hostname: "rezekoard.web.id", port: "9000" },
+      { protocol: "https", hostname: "storage.rezekoard.web.id" },
+
     ],
-  }
+  },
+  output: "standalone",
 };
 
-// Browser → localhost:3000/api/products   (browser lihat: same-origin ✓)
-//            ↓ Next.js meneruskan di server
-//         localhost:8080/api/products
 
 
 export default nextConfig;
