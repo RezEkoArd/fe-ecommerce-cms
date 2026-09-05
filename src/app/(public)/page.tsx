@@ -16,14 +16,14 @@ export default function HomePage() {
         </span>
 
         <p className="relative mb-7 text-[13px] uppercase tracking-[0.28em] text-accent">
-          Busana Butik Jepang
+          Streetwear Jepang
         </p>
         <h1 className="relative mx-auto mb-8 max-w-195 text-5xl font-bold leading-[1.16] tracking-tight text-balance sm:text-6xl">
-          Pakaian yang tenang, dibuat untuk bertahan.
+          Dari jalanan Tokyo, ke lemari kamu.
         </h1>
         <p className="relative mx-auto mb-11 max-w-122 text-lg leading-relaxed text-muted-foreground">
-          Kemeja linen, jaket sashiko, dan gaun indigo yang dicelup perlahan.
-          Sedikit pilihan, dipikirkan matang.
+          Hoodie oversized, cargo pants, dan jaket bertone gelap. Potongan
+          longgar dengan detail yang dipikirkan, dirilis dalam drop terbatas.
         </p>
         <Link
           href="/produk"
